@@ -8,11 +8,15 @@
 
 -spec connect(string(), list(), string(), fun()) -> ok | {error, reason}.
 connect({post, Url}, Auth, Params, Callback) ->
-    Headers = stream_client_util:headers_for_auth(Auth, {post, Url}, Params),
-    case catch httpc:request(post, {Url, Headers, ?CONTENT_TYPE, Params}, [], [{sync, false}, {stream, self}]) of
+    {Headers, Body} = case stream_client_util:headers_for_auth(Auth, {post, Url}, Params) of
+                        L when is_list(L) ->
+                            {L, Params};
+                          {H, L2} ->
+                              {H, L2}
+                      end,
+    case catch httpc:request(post, {Url, Headers, ?CONTENT_TYPE, Body}, [], [{sync, false}, {stream, self}]) of
         {ok, RequestId} ->
             ?MODULE:handle_connection(Callback, RequestId);
-
         {error, Reason} ->
             {error, {http_error, Reason}}
     end;
