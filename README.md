@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.org/lucaspiller/twerl.png)](https://travis-ci.org/lucaspiller/twerl)
 
+## Not currently working - Twitter has [turned off Basic Auth](https://dev.twitter.com/docs/streaming-apis/connecting) for all endpoints including streaming
+
 An Erlang client for the Twitter Streaming API.
 
 ## Goals
